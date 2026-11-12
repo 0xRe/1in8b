@@ -1,0 +1,3 @@
+import assert from 'node:assert/strict';import test from 'node:test';import {chartSeries} from '../src/lib/chart-series';
+test('financial chart preserves debt and gaps in legacy income data',()=>{const s=chartSeries([-500,0,null,1000]);assert.equal(s.min,-500);assert.equal(s.max,1000);assert.equal(s.path.match(/M/g)?.length,2);assert.ok(s.y(-500)>s.y(0));assert.equal(s.x(3),520);});
+test('empty and constant series produce finite chart coordinates',()=>{for(const values of [[],[null],[0],[50,50]]){const s=chartSeries(values);assert.ok(Number.isFinite(s.y(0)));assert.ok(!/NaN|Infinity/.test(s.path));}});

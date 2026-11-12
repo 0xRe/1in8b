@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {GraduateStudyNotice} from '../src/components/GraduateStudyNotice';
+import {createNewGame} from '../src/game/new-game';
+import {DEFAULT_SETTINGS} from '../src/game/engine';
+import {translator} from '../src/lib/i18n';
+import {graduateStudyAccess} from '../src/game/graduate-study-access';
+test('graduate funding notice explains the threshold without introducing an actionable choice',()=>{
+ const life=createNewGame({...DEFAULT_SETTINGS,country:'JPN'},1);
+ life.pendingDecision={id:'academicAfterUniversity-22',age:22,type:'choice',key:'decision.academicAfterUniversity',params:{},choices:[]};
+ life.stats.incomeQuintile=2;life.stats.savings=0;
+ const t=translator('en');
+ const render=()=>renderToStaticMarkup(createElement(GraduateStudyNotice,{life,t}));
+ const html=render();assert.match(html,/personal savings/);assert.ok(html.includes(t.money(graduateStudyAccess(life)!.cost)));assert.doesNotMatch(html,/<button/);
+ life.stats.savings=graduateStudyAccess(life)!.cost;assert.equal(render(),'');
+ life.stats.savings=0;life.academics!.upperFacts!.unregisteredBirth=true;assert.equal(render(),'');
+ life.academics!.upperFacts!.unregisteredBirth=false;life.pendingDecision.id='job-22';assert.equal(render(),'');
+});

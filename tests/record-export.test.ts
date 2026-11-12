@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {createLife,DEFAULT_SETTINGS} from '../src/game/engine';import {recordRows,recordCsv,recordTable} from '../src/lib/record-export';import {translator} from '../src/lib/i18n';
+test('annual exports retain every numeric and family column with blanks for legacy history',()=>{const life=createLife(DEFAULT_SETTINGS,42),t=translator('en'),rows=recordRows(life,t);assert.equal(rows[0].length,26);assert.equal(rows[1].length,26);assert.ok(rows[1][7]);life.history[0].annual=null;assert.deepEqual(recordRows(life,t)[1].slice(7),Array(19).fill(''));assert.ok(recordCsv(life,t).startsWith('\ufeff'));});
+test('record exports escape markup and spreadsheet formula strings',()=>{const life=createLife(DEFAULT_SETTINGS,42);assert.ok(!recordTable(life,()=>'<script>','en').includes('<script>'));assert.ok(recordCsv(life,()=>'=1+2').includes('"\'=1+2"'));});

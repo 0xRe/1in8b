@@ -1,0 +1,338 @@
+/* Two-player lifetime room.
+   Phones (<=700px) use an app shell with bottom tabs, like the solo game's phone tabs.
+   Wider screens use one scrolling page: a sticky header with the room's main action,
+   then "me / my life / together" columns, mirroring the solo game's three columns. */
+.duo-lifetime{--dl-ink:var(--ink,#13212a);--dl-paper:var(--paper,#f7f8f4);--dl-line:var(--line,#cbd5cf);--dl-bg:var(--bg,#ebf0ed);--dl-soft:var(--soft,#dce6df);--dl-muted:var(--muted,#61716e);--dl-teal:var(--teal,#0f6e68);--dl-accent:#aa402d;--dl-accent-shadow:#742c20;--dl-focus:#ce845a;position:relative;width:100%;color:var(--dl-ink);background:var(--dl-bg);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px;line-height:1.5}
+[data-theme=dark] .duo-lifetime{--dl-accent:#b8553f;--dl-accent-shadow:#6b281c}
+.duo-lifetime *{box-sizing:border-box}
+.duo-lifetime button,.duo-lifetime input,.duo-lifetime select,.duo-lifetime textarea{font:inherit;color:inherit}
+.duo-lifetime button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:9px 13px;border:1px solid var(--dl-line);border-radius:8px;background:var(--dl-paper);font-size:14px;line-height:1.35;text-align:center;cursor:pointer;transition:background .15s,filter .15s}
+.duo-lifetime button:hover:not(:disabled){background:var(--dl-soft)}
+.duo-lifetime button:disabled{opacity:.5;cursor:default}
+.duo-lifetime :is(button,summary,a,input,select,textarea):focus-visible{outline:3px solid var(--dl-focus);outline-offset:2px}
+.duo-lifetime .dl-primary,.duo-lifetime .duo-primary{background:var(--dl-accent);border-color:var(--dl-accent);color:#fff;font-weight:600;box-shadow:0 3px 0 var(--dl-accent-shadow)}
+.duo-lifetime .dl-primary:hover:not(:disabled),.duo-lifetime .duo-primary:hover:not(:disabled){background:var(--dl-accent);filter:brightness(1.07)}
+.duo-lifetime .dl-danger{color:#a53627}
+[data-theme=dark] .duo-lifetime .dl-danger{color:#f0a08c}
+.duo-lifetime .duo-eyebrow{font:11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--dl-muted);margin:0 0 8px}
+.duo-lifetime .dl-muted{color:var(--dl-muted)}
+
+/* Header: brand, both players, room actions; then the tools row. */
+.dl-head{background:var(--dl-paper);border-bottom:1px solid var(--dl-line)}
+.dl-top{display:flex;align-items:center;gap:24px;min-height:72px;padding:12px 24px}
+.dl-brand{display:flex;align-items:center;gap:10px;color:var(--dl-ink);text-decoration:none;flex-shrink:0}
+.dl-brand>span{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--dl-ink);color:var(--dl-paper);font:600 21px Georgia,serif}
+.dl-brand strong{font-size:14px;line-height:1.4}
+.dl-brand small{display:block;color:var(--dl-muted);font-size:11px;font-weight:400}
+.dl-players{display:flex;align-items:center;gap:16px;flex:1;min-width:0;max-width:520px;margin-inline:auto}
+.dl-person{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+.dl-person>svg,.dl-person>img{width:36px;height:44px;flex-shrink:0}
+.dl-person>div{min-width:0}
+.dl-person strong,.dl-person small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dl-person strong{font-size:14px}
+.dl-person small{font-size:12px;color:var(--dl-muted)}
+.dl-you{margin-left:6px;font-size:10px;font-weight:400;color:var(--dl-muted)}
+.dl-link{flex-shrink:0;color:var(--dl-muted)}
+.dl-avatar{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:50%;background:var(--dl-soft);color:var(--dl-muted);font-size:15px;font-weight:600;box-shadow:inset 0 0 0 2px var(--dl-line)}
+.dl-avatar.is-here{background:color-mix(in srgb,var(--dl-teal) 14%,var(--dl-paper));color:var(--dl-teal);box-shadow:inset 0 0 0 2px var(--dl-teal)}
+.dl-avatar.is-empty{background:transparent;box-shadow:none;border:1px dashed var(--dl-line)}
+.dl-room-actions{display:flex;gap:6px;flex-shrink:0}
+.duo-lifetime .dl-room-actions button{min-height:38px;padding:7px 10px;font-size:13px;background:transparent}
+.dl-tools{position:relative;display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-height:52px;padding:6px 24px;border-top:1px solid var(--dl-line)}
+.duo-lifetime .dl-tools>button,.dl-tools>details>summary{min-height:38px;padding:7px 11px;font-size:13px}
+.dl-tools>details{position:relative}
+.dl-tools>details>summary{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--dl-line);border-radius:8px;cursor:pointer;list-style:none}
+.dl-tools>details>summary::-webkit-details-marker{display:none}
+.dl-tools>details>summary::after{content:'▾';font-size:10px;color:var(--dl-muted)}
+.dl-playback{position:absolute;left:0;top:calc(100% + 6px);z-index:25;display:grid;gap:10px;width:280px;padding:14px;background:var(--dl-paper);border:1px solid var(--dl-line);border-radius:10px;box-shadow:0 14px 36px #13212a26}
+.dl-playback span{font-size:12px;color:var(--dl-muted)}
+.duo-lifetime .dl-playback button{min-height:38px;font-size:13px}
+.dl-header-action{display:flex;align-items:center;gap:12px;min-width:0;margin-left:auto}
+.dl-header-action>span{min-width:0;overflow:hidden;font-size:13px;color:var(--dl-muted);text-align:right;text-overflow:ellipsis;white-space:nowrap}
+.duo-lifetime .dl-header-action .dl-primary{min-width:180px;min-height:42px;white-space:nowrap}
+.dl-error,.dl-notice{display:flex;align-items:center;gap:12px;padding:8px 24px;border-top:1px solid var(--dl-line);background:#f5e2d4;font-size:13px;line-height:1.5}
+[data-theme=dark] .dl-error,[data-theme=dark] .dl-notice{background:#4a352b}
+.dl-error>span{flex:1;min-width:0;overflow-wrap:anywhere}
+.duo-lifetime .dl-error button{min-height:34px;padding:5px 10px;font-size:12px}
+
+/* Compact voice controls inside the tools row. */
+.duo-lifetime .duo-voice{display:flex;align-items:center;flex-wrap:nowrap;gap:6px;min-width:0;margin:0;padding:0;border:0;background:none}
+.duo-lifetime .duo-voice>div{width:auto;flex:0 0 auto}
+.duo-lifetime .duo-voice strong{display:block;font-size:13px}
+.duo-lifetime .duo-voice button{min-height:38px;padding:7px 11px;font-size:13px;white-space:nowrap}
+.duo-lifetime .duo-voice>details{flex:0 0 auto}
+.duo-lifetime .duo-voice summary{display:flex;align-items:center;justify-content:center;min-width:34px;min-height:38px;padding:6px;color:var(--dl-muted);list-style:none;cursor:pointer}
+.duo-lifetime .duo-voice summary::-webkit-details-marker{display:none}
+.duo-lifetime .duo-voice details[open] small{position:absolute;z-index:25;left:12px;right:12px;top:100%;max-width:340px;margin-top:4px;padding:12px;background:var(--dl-paper);border:1px solid var(--dl-line);border-radius:10px;font-size:12px;line-height:1.55;color:var(--dl-ink);box-shadow:0 14px 36px #13212a26}
+.duo-lifetime .duo-voice>p{flex:1 0 100%;margin:4px 0 0;padding:8px 10px;background:var(--dl-paper);border:1px solid var(--dl-line);border-radius:8px;font-size:12px;overflow-wrap:anywhere}
+.duo-lifetime .duo-voice:has(>p){flex:1 0 100%;flex-wrap:wrap}
+
+/* Cards and their contents. */
+.dl-card{min-width:0;margin:0 0 16px;padding:20px;background:var(--dl-paper);border:1px solid var(--dl-line);border-radius:10px;box-shadow:var(--shadow,0 12px 36px #172d430c);overflow-wrap:anywhere}
+.dl-card h1{margin:4px 0 12px;font:600 clamp(20px,2.2vw,26px)/1.3 'IBM Plex Sans',sans-serif;letter-spacing:-.02em}
+.dl-card h2{margin:16px 0 8px;font-size:17px;line-height:1.35}
+.dl-card h3{margin:14px 0 6px;font-size:15px}
+.dl-card p{margin:8px 0;font-size:14px;line-height:1.65}
+.dl-card small{color:var(--dl-muted)}
+.dl-card summary{min-height:30px;font-size:14px;font-weight:600;line-height:1.5;cursor:pointer}
+.dl-card label{display:grid;gap:6px;margin:12px 0;font-size:14px}
+.dl-card input,.dl-card select,.dl-card textarea{width:100%;min-width:0;margin:0;padding:10px;border:1px solid var(--dl-line);border-radius:6px;background:var(--dl-bg)}
+.dl-card textarea{min-height:100px}
+.dl-card fieldset{min-width:0;margin:0;padding:0;border:0}
+.dl-card details details{padding:10px 0;border-top:1px solid var(--dl-line)}
+.dl-card label:has(input[type=checkbox]){display:flex;align-items:center;gap:9px}
+.dl-card input[type=checkbox]{width:20px;height:20px;flex-shrink:0}
+.dl-card dd{margin:0}
+.dl-card .life-detail-list,.dl-card .budget-list,.dl-card .healthcare{max-width:100%;overflow-wrap:anywhere}
+.dl-card .life-detail-list>div{padding:8px 0}
+.dl-card .duo-keepsake{max-width:100%;margin:16px 0;padding:0;border:0;background:none;box-shadow:none}
+.dl-action-list{display:flex;flex-wrap:wrap;gap:8px;padding-top:8px}
+.dl-action-list>label,.dl-action-list>p{flex-basis:100%;margin:4px 0}
+.duo-lifetime .dl-action-list>button{min-height:40px;font-size:13px;text-align:left}
+.duo-lifetime .dl-action-list>button[aria-pressed=true]{border-color:var(--dl-teal);color:var(--dl-teal)}
+
+.dl-art{position:relative;overflow:hidden;aspect-ratio:16/7;border:1px solid var(--dl-line);border-radius:10px;background:var(--dl-soft)}
+.dl-art .life-scene{display:block;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:center 62%;image-rendering:pixelated}
+.dl-art>span{position:absolute;left:10px;bottom:10px;padding:4px 9px;border-radius:5px;background:var(--dl-paper);color:var(--dl-ink);font-size:12px}
+.dl-vitals{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:8px;margin:12px 0 16px}
+.dl-vitals>span{min-width:0;padding:9px 12px;border:1px solid var(--dl-line);border-radius:8px;background:var(--dl-paper);color:var(--dl-muted);font-size:12px}
+.dl-vitals strong{display:block;color:var(--dl-ink);font-size:17px}
+.dl-decision{border-top:4px solid var(--dl-accent)}
+.dl-choices{display:grid;gap:10px}
+.duo-lifetime .dl-choices>button{justify-content:flex-start;padding:13px 15px;font-size:15px;text-align:left;white-space:normal}
+.duo-lifetime .dl-choices>button[aria-pressed=true]{border:2px solid var(--dl-teal);background:color-mix(in srgb,var(--dl-teal) 12%,var(--dl-paper))}
+.dl-recent{margin:0;padding:0;list-style:none}
+.dl-recent li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid var(--dl-line)}
+.dl-recent li:first-child{border-top:0}
+.dl-recent small{padding-top:2px;font:12px 'IBM Plex Mono',monospace}
+.dl-recent p{margin:0}
+.dl-terms{margin:12px 0;padding:16px;border:1px solid var(--dl-line);border-radius:9px}
+.duo-lifetime .dl-terms button{display:flex;width:100%;margin:8px 0 0}
+.dl-shared-card.is-active{border-top:4px solid var(--dl-teal)}
+.dl-messages{min-height:120px}
+.dl-messages>div:empty{display:none}
+.dl-messages>div:not(:empty){margin:8px 15% 8px 0;padding:9px 12px;border-radius:10px;background:var(--dl-soft)}
+.dl-messages>div.mine{margin:8px 0 8px 15%;background:color-mix(in srgb,var(--dl-teal) 14%,var(--dl-paper))}
+.dl-messages strong{font-size:11px}
+.dl-messages p{margin:3px 0;overflow-wrap:anywhere}
+.dl-chat-form{display:flex;gap:8px;padding-top:10px;background:var(--dl-paper)}
+.dl-chat-form input{flex:1}
+.duo-lifetime .dl-chat-form button{flex:0 0 46px;padding:0}
+.dl-timeline{padding-left:0;list-style:none}
+.dl-timeline li{padding:6px 14px;border-left:2px solid var(--dl-line)}
+.dl-timeline p{margin:2px 0}
+.dl-passport-person{display:flex;align-items:center;gap:14px}
+.dl-passport-person>svg,.dl-passport-person>img{width:48px;height:58px;flex-shrink:0}
+.dl-passport-person h2{margin:0;font-size:19px;overflow-wrap:anywhere}
+.dl-passport-person p{margin:4px 0;color:var(--dl-muted);font-size:13px}
+.dl-passport dl{margin:12px 0 0}
+.dl-passport dl>div{display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;padding:7px 0;border-top:1px solid var(--dl-line);font-size:12px}
+.dl-passport dt{color:var(--dl-muted)}
+.dl-birth{border-color:var(--dl-teal)}
+.dl-birth img{display:block;width:min(100%,280px);height:auto;margin:14px auto;border:1px solid var(--dl-line)}
+.dl-birth-actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Lobby. */
+.dl-lobby{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.8fr);gap:36px;align-items:start;max-width:1160px;margin:0 auto;padding-block:12px}
+.dl-welcome{min-width:0}
+.dl-welcome h1{max-width:560px;margin:10px 0 18px;font:600 clamp(28px,3.3vw,44px)/1.15 'IBM Plex Sans',sans-serif;letter-spacing:-.035em}
+.dl-lead{max-width:530px;color:var(--dl-muted);font-size:17px;line-height:1.65}
+.dl-lobby-scene{overflow:hidden;aspect-ratio:2.5;margin:24px 0;border:1px solid var(--dl-line);border-radius:18px;background:var(--dl-soft)}
+.dl-lobby-scene .life-scene{display:block;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;image-rendering:pixelated}
+.dl-how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.dl-how span{display:block;margin-bottom:8px;color:var(--wine);font:12px 'IBM Plex Mono',monospace}
+.dl-how strong{font-size:13px}
+.dl-how p{margin:6px 0;color:var(--dl-muted);font-size:12px;line-height:1.6}
+.dl-lobby-birth{margin-top:22px;padding-top:16px;border-top:1px solid var(--dl-line);font-size:13px}
+.dl-lobby-birth summary{cursor:pointer}
+.dl-start-card{position:sticky;top:calc(var(--dl-head-height,124px) + 16px);padding:26px;border:1px solid var(--dl-line);border-radius:18px;background:var(--dl-paper);box-shadow:0 14px 40px #172d4309}
+.dl-start-card h2{margin:12px 0 20px;font-size:23px;line-height:1.25;letter-spacing:-.025em}
+.dl-seat{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--dl-line)}
+.dl-seat>svg{width:32px;height:38px;flex-shrink:0}
+.dl-seat>.dl-avatar{width:32px;height:32px;font-size:14px}
+.dl-seat>div{flex:1;min-width:0}
+.dl-seat strong,.dl-seat small{display:block;overflow-wrap:anywhere}
+.dl-seat strong{font-size:14px}
+.dl-seat small{margin-top:3px;color:var(--dl-muted);font-size:12px}
+.duo-lifetime .dl-invite{display:flex;width:100%;min-height:48px;margin:20px 0;font-size:14px}
+.dl-start-card fieldset{min-width:0;margin:20px 0 0;padding:0;border:0}
+.dl-start-card legend{margin-bottom:10px;font-size:13px;font-weight:600}
+.dl-pace-options{display:grid;gap:8px}
+.duo-lifetime .dl-pace-options button{display:block;padding:12px;background:transparent;text-align:left}
+.dl-pace-options button strong{display:block;font-size:13px}
+.dl-pace-options button small{display:block;margin-top:4px;color:var(--dl-muted);font-size:12px}
+.duo-lifetime .dl-pace-options button[aria-pressed=true]{border-color:var(--dl-teal);background:color-mix(in srgb,var(--dl-teal) 7%,var(--dl-paper));box-shadow:inset 3px 0 var(--dl-teal)}
+.dl-start-note{margin:16px 0;color:var(--dl-muted);font-size:12px;line-height:1.65}
+.dl-lobby-foot{display:block;color:var(--dl-muted);font-size:11px;line-height:1.5}
+.dl-start-card label{display:block;margin:12px 0;font-size:12px}
+.dl-start-card input{width:100%;min-width:0;padding:9px;border:1px solid var(--dl-line);border-radius:6px;background:var(--dl-paper);color:var(--dl-ink)}
+.dl-lobby-mode .dl-tools{display:none}
+.dl-lobby-mode .dl-tools:has(.duo-voice){display:flex}
+
+.dl-dialog-backdrop{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:20px;background:#13212a66}
+.dl-confirm-dialog{width:100%;max-width:400px;padding:26px;background:var(--dl-paper);border:1px solid var(--dl-line);border-radius:16px;box-shadow:0 24px 80px #13212a40}
+.dl-confirm-dialog h2{margin:0 0 12px;font-size:22px;line-height:1.3}
+.dl-confirm-dialog p{color:var(--dl-muted);font-size:14px;line-height:1.6}
+.dl-confirm-dialog>div{display:flex;gap:10px;margin-top:22px}
+.dl-confirm-dialog>div button{flex:1;font-size:13px}
+
+/* Wide screens: one page, sticky header, three columns (two on tablets). */
+.dl-wide{min-height:100vh}
+.dl-wide .dl-head{position:sticky;top:0;z-index:20}
+.dl-wide .dl-content{padding:24px}
+.dl-board{display:grid;grid-template-columns:280px minmax(0,1fr) 340px;grid-template-areas:"me story together";gap:24px;align-items:start;max-width:1440px;margin:0 auto}
+.dl-col-me{grid-area:me;min-width:0}
+.dl-col-story{grid-area:story;min-width:0}
+.dl-col-together{grid-area:together;position:sticky;top:calc(var(--dl-head-height,124px) + 24px);display:flex;flex-direction:column;min-width:0;max-height:calc(100vh - var(--dl-head-height,124px) - 48px)}
+.dl-col-together>section{min-height:0}
+.dl-col-together>#dl-chat{display:flex;flex:1;min-height:320px}
+.dl-col-together .dl-chat-card{display:flex;flex:1;flex-direction:column;min-height:0;margin:0}
+.dl-col-together .dl-messages{flex:1;min-height:120px;overflow-y:auto;overscroll-behavior:contain}
+.dl-col-together .dl-shared-card{padding:16px}
+.dl-col-together .dl-shared-card h1{font-size:17px}
+.dl-col-me .dl-card{padding:16px}
+.dl-col-me .dl-passport{border-top:4px solid var(--dl-ink)}
+.dl-wide section[id^=dl-]{scroll-margin-top:calc(var(--dl-head-height,124px) + 16px)}
+@media(max-width:1100px) and (min-width:701px){.dl-board{grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto 1fr;grid-template-areas:"story me" "story together"}
+.dl-col-me .dl-card:first-child{border-top:4px solid var(--dl-ink)}
+.dl-lobby{grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);gap:24px}
+.dl-how{grid-template-columns:1fr}
+.dl-how>div{display:grid;grid-template-columns:24px 1fr;gap:0 8px}
+.dl-how p{grid-column:2}
+}
+@media(max-width:1000px) and (min-width:701px){.dl-brand strong{display:none}
+.dl-top{gap:16px}
+.dl-header-action>span{display:none}
+}
+
+/* Phones: fixed-height app shell; the tab bar sits at the bottom edge. */
+.dl-phone{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+.dl-phone .dl-head{flex-shrink:0}
+.dl-phone .dl-top{flex-wrap:wrap;gap:8px;min-height:0;padding:8px 12px}
+.dl-phone .dl-brand{gap:6px}
+.dl-phone .dl-brand>span{width:32px;height:32px;font-size:17px}
+.dl-phone .dl-brand strong{font-size:13px}
+.dl-phone .dl-brand small{font-size:10px}
+.dl-phone .dl-room-actions{margin-left:auto}
+.duo-lifetime.dl-phone .dl-room-actions button{min-height:36px;padding:6px 8px;font-size:12px}
+.dl-phone .dl-players{order:3;flex-basis:100%;max-width:none;gap:10px;margin:0;padding-top:8px;border-top:1px solid var(--dl-line)}
+.dl-phone .dl-person>svg{width:28px;height:34px}
+.dl-phone .dl-person strong{font-size:13px}
+.dl-phone .dl-person small{font-size:11px}
+.dl-phone .dl-players .dl-avatar{width:28px;height:28px;font-size:13px}
+.dl-phone .dl-tools{gap:6px;min-height:0;padding:5px 12px}
+.dl-phone .dl-tools>details{position:static}
+.dl-phone .dl-playback{left:12px;right:12px;width:auto}
+.duo-lifetime.dl-phone .dl-tools>button,.dl-phone .dl-tools>details>summary,.duo-lifetime.dl-phone .duo-voice button{min-height:36px;padding:6px 9px;font-size:12px}
+.dl-phone .dl-error,.dl-phone .dl-notice{padding:8px 12px;max-height:100px;overflow:auto}
+.dl-phone .dl-content{flex:1;min-height:0;padding:12px;overflow-y:auto;overscroll-behavior:contain;scroll-padding:12px}
+.dl-phone .dl-content>[hidden]{display:none!important}
+.dl-phone .dl-card{padding:16px}
+.dl-phone .dl-card h1{font-size:21px}
+.dl-phone .dl-art{aspect-ratio:auto;height:150px}
+.dl-phone .dl-art-decision{display:none}
+.dl-phone .dl-art-decision+.dl-vitals{margin-top:0}
+.dl-phone .dl-vitals>span{padding:7px 10px}
+.dl-phone .dl-chat-form{position:sticky;bottom:-12px;padding-bottom:12px}
+.dl-phone .dl-lobby{display:flex;flex-direction:column;gap:20px;padding:4px 0}
+.dl-phone .dl-start-card{order:-1;position:static;width:100%;padding:20px;border-radius:14px}
+.dl-phone .dl-welcome{padding:4px}
+.dl-phone .dl-welcome h1{font-size:27px}
+.dl-phone .dl-lead{font-size:14px}
+.dl-phone .dl-lobby-scene{margin:18px 0}
+.dl-phone .dl-how{gap:12px}
+.dl-phone .dl-how strong{font-size:12px}
+.dl-phone .dl-how p{font-size:11px}
+.dl-phone .dl-confirm-dialog{padding:22px}
+.dl-navigation{order:10;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;flex-shrink:0;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--dl-line);background:color-mix(in srgb,var(--dl-paper) 92%,transparent);backdrop-filter:blur(12px);box-shadow:0 -4px 16px #172d4309}
+.duo-lifetime .dl-navigation button{flex-direction:column;gap:4px;min-width:0;min-height:52px;padding:4px 0;border:0;border-radius:12px;background:transparent;color:var(--dl-muted);font-size:11.5px;font-weight:600;line-height:1.2}
+.duo-lifetime .dl-navigation button[aria-selected=true]{background:color-mix(in srgb,var(--wine,#8c1d3c) 10%,transparent);color:var(--wine,#8c1d3c)}
+.dl-lobby-mode .dl-navigation{display:none}
+/* The app's document footer rules must not size the in-game action bar. */
+.duo-lifetime .dl-bottom{display:block;flex-shrink:0;align-self:stretch;width:100%;max-width:none;margin:0;padding:0;border-top:1px solid var(--dl-line);background:var(--dl-paper);color:var(--dl-ink);text-align:left}
+.duo-lifetime .dl-bottom[hidden]{display:none}
+.dl-primary-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:9px 12px}
+.dl-primary-row small{flex:1;min-width:0;font-size:12px;line-height:1.4;color:var(--dl-muted)}
+.duo-lifetime .dl-primary-row button{max-width:65%;min-height:44px;font-size:14px}
+@media(max-width:400px){.dl-room-actions button>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dl-phone .duo-voice>div{display:none}
+}
+@media(max-width:360px){.dl-vitals{grid-template-columns:1fr 1fr}
+.dl-vitals>span:last-child{grid-column:1/-1}
+.dl-primary-row small{font-size:10px}
+.duo-lifetime .dl-primary-row button{max-width:68%;padding:9px;font-size:12px}
+.duo-lifetime .dl-navigation button{font-size:10px}
+.dl-navigation{gap:2px;padding-inline:4px}
+}
+@media(max-height:650px){.dl-phone .dl-art{height:78px}
+.dl-phone .dl-primary-row small{display:none}
+.duo-lifetime.dl-phone .dl-primary-row button{width:100%;max-width:100%}
+.duo-lifetime .dl-navigation button{min-height:44px}
+}
+
+/* Friend's life: same passport language as mine, in the friend's teal. */
+.dl-face{display:inline-grid;place-items:center;flex-shrink:0;overflow:hidden;border-radius:8px;background:var(--dl-soft);box-shadow:0 0 0 2px var(--dl-line)}
+.dl-face.is-here{box-shadow:0 0 0 2px var(--dl-teal)}
+.dl-face>svg{display:block;width:100%;height:100%}
+.dl-person>.dl-face{width:36px;height:44px}
+.dl-phone .dl-person>.dl-face{width:28px;height:34px}
+.dl-seat>.dl-face{width:32px;height:38px}
+.duo-lifetime .dl-friend-card,.dl-col-me .dl-friend-card{border-top:4px solid var(--dl-teal)}
+.dl-friend-card .dl-passport-person>div{flex:1;min-width:0}
+.dl-friend-card .dl-passport-person>svg{border-radius:6px;background:var(--dl-soft)}
+.dl-status{flex-shrink:0;align-self:flex-start;padding:3px 9px;border-radius:99px;background:var(--dl-soft);color:var(--dl-muted);font-size:11px;font-weight:600;line-height:1.5}
+.dl-status.is-here{background:color-mix(in srgb,var(--dl-teal) 14%,var(--dl-paper));color:var(--dl-teal)}
+.dl-status.is-choosing{background:color-mix(in srgb,var(--dl-accent) 14%,var(--dl-paper));color:var(--dl-accent)}
+.dl-friend-vitals{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px}
+.dl-friend-vitals>span{min-width:0;padding:7px 10px;border:1px solid var(--dl-line);border-radius:8px;color:var(--dl-muted);font-size:12px}
+.dl-friend-vitals strong{display:block;color:var(--dl-ink);font-size:16px}
+.dl-friend-card h3{margin:14px 0 2px;font-size:13px}
+.dl-friend-card .dl-recent li{grid-template-columns:48px minmax(0,1fr);gap:8px;padding:7px 0;font-size:13px}
+.dl-friend-card .dl-recent small{font-size:11px}
+.dl-friend-note{display:block;margin-top:10px;font-size:11px;line-height:1.5}
+.dl-friend-latest{display:flex;align-items:flex-start;gap:10px;margin-top:12px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--dl-teal) 30%,var(--dl-line));border-radius:8px;background:color-mix(in srgb,var(--dl-teal) 8%,var(--dl-paper))}
+.dl-friend-latest>.dl-face{width:28px;height:34px}
+.dl-friend-latest p{margin:0;font-size:14px}
+.dl-friend-latest small{display:block;margin-bottom:2px;color:var(--dl-teal);font-size:11px;font-weight:600}
+
+.dl-bond, .dl-goal {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  border: 1px solid var(--dl-line); background: var(--dl-soft); border-radius: 10px;
+  padding: 10px 12px; margin: 12px 0; font-size: 13px;
+}
+.dl-bond svg { flex: none; color: var(--dl-teal); }
+.dl-bond strong { margin-inline-start: auto; }
+.dl-goal { display: grid; }
+.dl-goal progress { width: 100%; height: 10px; accent-color: var(--dl-teal); }
+.dl-goal small { color: var(--dl-muted); }
+.dl-choice-actions, .dl-keepsake-disclosure { margin-top: 12px; }
+.dl-choice-actions { display: grid; gap: 8px; }
+.dl-choice-actions button { width: 100%; }
+.dl-shared-card .dl-decline { margin-top: 14px; }
+.dl-terms details { margin: 8px 0; }
+.dl-terms summary { color: var(--dl-teal); cursor: pointer; }
+.dl-unread {
+  display: inline-grid; place-items: center; min-width: 20px; min-height: 20px;
+  padding: 0 5px; border-radius: 99px; font: 600 11px/1 sans-serif; color: #fff; background: #245f67;
+}
+.dl-navigation button { position: relative; }
+.dl-navigation .dl-unread { position: absolute; top: 1px; left: calc(50% + 6px); }
+.dl-chat-card h1 .dl-unread { vertical-align: middle; }
+.dl-chat-jump { margin-bottom: 8px; }
+.dl-chat-form input { min-width: 0; font-size: 16px; }
+.dl-confirm-dialog, .dl-card, .dl-tools { overflow-wrap: anywhere; }
+.dl-wide .dl-board section { scroll-margin-top: calc(var(--dl-head-height, 145px) + 20px); }
+
+@media (max-width: 840px) {
+  .duo-lifetime .dl-room-actions button { width: 44px; min-height: 44px; padding: 6px; }
+  .dl-room-actions button > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .dl-phone .dl-start-card { padding: clamp(14px, 4vw, 24px); }
+  .dl-phone .dl-bond { gap: 6px; }
+  .dl-phone .dl-chat-form { grid-template-columns: minmax(0, 1fr) auto; }
+  .dl-phone .dl-chat-form button { min-width: 44px; min-height: 44px; }
+}
+@media (max-width: 390px) {
+  .dl-phone .dl-tools { gap: 5px; }
+  .duo-lifetime.dl-phone .dl-tools > button, .dl-phone .dl-tools > details > summary { padding-inline: 8px; }
+  .dl-phone .duo-voice-compact > .duo-agora-inline { display: none; }
+}

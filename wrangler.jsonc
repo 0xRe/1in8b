@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "1in8bn",
+  "main": "src/server.ts",
+  "compatibility_date": "2026-10-19",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "html_handling": "none"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "DUO_ROOMS",
+        "class_name": "DuoRoom"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "duo-v1",
+      "new_sqlite_classes": [
+        "DuoRoom"
+      ]
+    }
+  ]
+}

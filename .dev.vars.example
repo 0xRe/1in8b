@@ -1,0 +1,4 @@
+# Agora WebRTC credentials for Duo Mode real-time voice chat
+# Obtain these from https://console.agora.io/
+AGORA_APP_ID=""
+AGORA_APP_CERTIFICATE=""

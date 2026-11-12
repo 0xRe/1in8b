@@ -1,0 +1,110 @@
+@keyframes birthplace-word {from{opacity:.35;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes birthplace-progress {from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes birthplace-arrival {from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.birth-draw {position:relative;isolation:isolate;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 24px 110px;overflow:hidden;background:var(--bg);outline:0;}
+.birth-draw-brand {position:absolute;top:30px;left:40px;font-family:'Hahmlet',serif;font-size:24px;margin:0;color:var(--wine);}
+.birth-draw-brand span {color:var(--ink);font-size:15px;}
+.birth-draw-map {position:absolute;z-index:-1;width:min(1000px,95vw);opacity:.17;top:50%;left:50%;transform:translate(-50%,-65%);pointer-events:none;}
+.birth-draw-map .world-map {width:100%;height:auto;}
+.birth-draw-copy {width:min(850px,100%);}
+.birth-draw-copy>.eyebrow {font-size:11px;letter-spacing:.17em;margin:0 0 26px;color:var(--teal);}
+.birth-draw-country {min-height:125px;display:flex;align-items:center;justify-content:center;gap:16px;}
+.birth-draw-country h1 {font-size:clamp(38px,7vw,86px);line-height:1.12;letter-spacing:-2px;margin:0;animation:birthplace-word .12s ease-out;overflow-wrap:anywhere;}
+.birth-draw-flag {font-size:38px;line-height:1;}
+.birth-draw-odds {font-size:12px;color:var(--muted);margin:22px 0 32px;min-height:24px;}
+.birth-draw-odds strong {margin-left:10px;color:var(--teal);font-family:'IBM Plex Mono',monospace;font-weight:500;}
+.birth-draw-progress {height:2px;width:180px;margin:auto;background:var(--line);overflow:hidden;}
+.birth-draw-progress i {display:block;width:100%;height:100%;background:var(--wine);transform-origin:left;animation:birthplace-progress 3.2s ease-out both;}
+.birth-draw-wait {font-size:13px;color:var(--muted);margin-top:27px;}
+.birth-draw-skip {position:absolute;bottom:max(30px,env(safe-area-inset-bottom));right:40px;font-size:12px;color:var(--muted);border:0;padding:14px 10px;min-height:44px;}
+.birth-draw--settled .birth-draw-country h1 {color:var(--wine);animation:birthplace-arrival .45s ease-out;}
+.birth-draw--settled .birth-draw-map {opacity:.3;transition:opacity .4s;}
+.birth-draw--settled .birth-draw-progress i {animation:none;transform:scaleX(1);}
+.birth-draw .sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.birth-paper--reveal {animation:birthplace-arrival .5s ease-out both;}
+.birth-paper--reveal .certificate-heading {animation:birthplace-arrival .5s .08s ease-out both;}
+.birth-paper--reveal .birth-details>div {animation:birthplace-arrival .38s ease-out both;animation-delay:.16s;}
+.birth-paper--reveal .birth-probability,.birth-paper--reveal .birth-actions {animation:birthplace-arrival .5s .3s ease-out both;}
+.birth-invitation {display:flex;align-items:center;gap:20px;padding:20px 24px;border:1px solid var(--line);border-left:4px solid var(--wine);border-radius:8px;margin:0 0 30px;background:var(--paper);}
+.birth-invitation>div {flex:1;min-width:0;}
+.birth-invitation p {margin:0 0 5px;font-family:'Hahmlet',serif;font-size:20px;line-height:1.5;}
+.birth-invitation small {font-size:12px;line-height:1.7;color:var(--muted);}
+.birth-invitation>.primary {font-size:12px;white-space:nowrap;min-height:44px;}
+.share-life--editor {grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:36px;}
+.share-life--editor .share-controls {min-width:0;}
+.share-life--editor .share-controls h2 {font-size:30px;line-height:1.3;letter-spacing:-.7px;margin:10px 0 14px;}
+.share-life--editor .share-intro {font-size:14px;color:var(--muted);margin-bottom:24px;}
+.share-life--editor .share-primary {width:100%;min-height:83px;gap:16px;border-radius:12px;justify-content:center;padding:17px 20px;margin:6px 0 14px;}
+.share-primary>span {display:block;}
+.share-primary small {display:block;line-height:1.6;font-size:11px;font-weight:400;opacity:.85;margin-top:5px;}
+.share-destinations {display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.share-destinations a,.share-destinations button {display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:12px;line-height:1.4;text-align:center;color:var(--ink);background:var(--paper);text-decoration:none;}
+.share-destinations a:hover {background:var(--soft);border-color:var(--muted);}
+.share-destinations a:focus-visible,.share-whatsapp:focus-visible {outline:3px solid var(--gold);outline-offset:3px;}
+.share-whatsapp {display:inline-flex;align-items:center;gap:5px;color:var(--teal);font-size:12px;margin:14px 0 5px;text-underline-offset:3px;}
+.share-format {border:0;padding:0;margin:16px 0 22px;display:flex;gap:8px;flex-wrap:wrap;}
+.share-format legend {font-size:11px;color:var(--muted);margin-bottom:9px;}
+.share-format button {font-size:11px;border-radius:6px;min-height:38px;padding:8px 14px;}
+.share-format button[aria-pressed=true] {background:var(--teal);color:var(--paper);border-color:var(--teal);}
+.share-post {font-size:12px;border-block:1px solid var(--line);padding:12px 0;}
+.share-post summary {cursor:pointer;min-height:32px;padding:6px 0;color:var(--muted);}
+.share-post>label {display:block;margin:12px 0 8px;}
+.share-post textarea,.share-controls>textarea {width:100%;min-height:75px;border:1px solid var(--line);border-radius:7px;padding:12px;background:var(--paper);color:var(--ink);font-size:13px;resize:vertical;}
+.share-post .share-copy {white-space:pre-line;font-size:12px;line-height:1.8;}
+.share-post>a {font-size:11px;overflow-wrap:anywhere;color:var(--teal);}
+.share-life--editor .share-attach-note,.share-life--editor .share-privacy-note {font-size:11px;line-height:1.8;color:var(--muted);margin:14px 0 0;}
+.share-life--editor .share-status {font-size:12px;line-height:1.8;color:var(--teal);min-height:20px;}
+.share-life--editor .share-preview {position:sticky;top:0;min-height:300px;display:flex;align-items:center;justify-content:center;max-height:76dvh;}
+.share-life--editor .share-preview img {width:100%;max-height:76dvh;object-fit:contain;border-radius:8px;box-shadow:0 10px 35px #13212a18;border:0;}
+.share-life--editor .share-preview>p {font-size:13px;color:var(--muted);}
+@media(max-width:760px){.share-life--editor{grid-template-columns:minmax(0,1fr);gap:20px;}.share-life--editor .share-preview{position:static;max-width:420px;max-height:none;width:100%;}.share-life--editor .share-preview img{max-height:none;}.share-life--editor .share-controls h2{font-size:27px;}.birth-invitation{align-items:flex-start;flex-wrap:wrap;gap:12px;padding:18px;}.birth-invitation>div{flex-basis:calc(100% - 40px);}.birth-invitation>.icon-button{order:-1;margin-left:auto;}.birth-invitation>.primary{white-space:normal;}.birth-draw-brand{left:24px;}.birth-draw-skip{right:24px;}.birth-draw-country{min-height:150px;gap:10px;}.birth-draw-flag{font-size:28px;}.birth-draw-country h1{letter-spacing:-1px;}.birth-draw-map{width:145vw;}.birth-invitation p{font-size:18px;}}
+@media(prefers-reduced-motion:reduce){.birth-draw *,.birth-paper--reveal,.birth-paper--reveal *{animation:none!important;transition:none!important;}}
+
+.birth-paper--reveal .birth-details>div:nth-child(n+4){animation-delay:.23s;}
+.birth-paper--reveal .birth-details>div:nth-child(n+7){animation-delay:.3s;}
+.share-life--editor .share-destinations button{background:var(--paper);color:var(--ink);}
+.share-life--editor .share-format button{background:var(--paper);color:var(--ink);}
+.share-life--editor .share-format button[aria-pressed=true]{background:var(--teal);color:var(--paper);}
+
+/* A friend's shared life: portrait, who they were, then the invitation to draw your own. */
+.birth-invitation--life {border-left-color:var(--teal);}
+.birth-invitation-face {flex:0 0 auto;width:64px;padding:5px;border:1px solid var(--line);border-radius:6px;background:var(--soft,#efe6d3);}
+.birth-invitation-face .portrait {display:block;width:100%;height:auto;image-rendering:pixelated;}
+.birth-invitation--life p {margin:0 0 3px;}
+.birth-invitation-grain {display:block;}
+.birth-invitation--life strong {display:block;margin-top:6px;font-size:14px;line-height:1.5;color:var(--ink);}
+@media(max-width:760px){.birth-invitation--life{display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:start;}.birth-invitation--life>.icon-button{order:0;grid-column:3;grid-row:1;}.birth-invitation--life>div{grid-column:2;grid-row:1;}.birth-invitation--life>.primary{grid-column:1/-1;width:100%;justify-content:center;}}
+/* Phones: the card, then the share button, without scrolling past a repeated heading. */
+@media(max-width:760px){
+ .modal .share-life--editor{gap:14px;}
+ .modal .share-life--editor .share-preview img{max-height:min(420px,44dvh);}
+ .modal .share-life--editor .share-controls{display:flex;flex-direction:column;}
+ .modal .share-life--editor .share-controls>.share-primary{order:-1;min-height:64px;margin:0 0 12px;}
+ .modal .share-life--editor .share-controls>.eyebrow,.modal .share-life--editor .share-controls>h2{display:none;}
+ .modal .share-life--editor .share-intro{margin-bottom:14px;font-size:13px;}
+}
+
+/* Ending of a life begun from a friend's link: the two lives side by side. */
+.invited-compare {border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:10px;background:var(--paper);padding:18px 20px;margin:0 0 22px;}
+.invited-compare h3 {margin:0 0 14px;font-family:'Hahmlet',serif;font-size:20px;font-weight:500;}
+.invited-compare-pair {display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.invited-compare figure {display:flex;align-items:center;gap:12px;margin:0;min-width:0;}
+.invited-compare-face {flex:0 0 auto;width:58px;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--soft,#efe6d3);}
+.invited-compare-face .portrait {display:block;width:100%;height:auto;image-rendering:pixelated;}
+.invited-compare figcaption {display:flex;flex-direction:column;gap:2px;min-width:0;font-size:13px;color:var(--muted);}
+.invited-compare figcaption b {color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.invited-compare figcaption em {font-style:normal;font-family:'Hahmlet',serif;font-size:24px;line-height:1.1;color:var(--wine);}
+.invited-compare>.primary {display:inline-flex;align-items:center;gap:8px;}
+@media(max-width:560px){.invited-compare-pair{grid-template-columns:1fr;}.invited-compare>.primary{width:100%;justify-content:center;}}
+
+/* Film studio: the make/share controls live under the preview. */
+.film-preview .studio-export {margin-top:14px;}
+.film-preview .studio-export>.primary {width:100%;justify-content:center;}
+.film-preview .studio-export video {display:block;width:100%;max-height:50vh;margin:8px 0;}
+.film-preview .studio-export .actions {flex-wrap:wrap;gap:8px;}
+@media(max-width:760px){.modal .film-preview canvas{max-height:48dvh;width:auto;max-width:100%;margin:0 auto;}}
+
+/* The closing frame of Last moments offers sharing beside the record. */
+.last-moments .actions .last-moments-share {display:inline-flex;align-items:center;gap:6px;}
+/* Last moments: the closing frame shows the shareable life card. */
+.last-moments .last-moments-card {display:block;width:auto;max-width:100%;max-height:min(40vh,460px);margin:0 auto 12px;border-radius:10px;box-shadow:0 10px 30px #13212a26;image-rendering:auto;}

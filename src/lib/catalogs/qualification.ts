@@ -1,0 +1,100 @@
+const labels:Record<string,readonly string[]>={
+ ko:['이수한 학력 없음','초등학교 졸업','중학교 졸업','고등학교 또는 직업교육 이수','학사 학위','석사 학위','박사 학위'],
+ ja:['修了した学歴なし','小学校卒業','中学校卒業','高校卒業または職業教育修了','学士号','修士号','博士号'],
+ zh:['尚無已完成學歷','小學畢業','初中畢業','高中或職業教育畢業','學士學位','碩士學位','博士學位'],
+ 'zh-hans':['尚无已完成学历','小学毕业','初中毕业','高中或职业教育毕业','学士学位','硕士学位','博士学位'],
+ vi:['Chưa hoàn thành bậc học nào','Hoàn thành tiểu học','Tốt nghiệp trung học cơ sở','Tốt nghiệp trung học phổ thông hoặc đào tạo nghề','Bằng cử nhân','Bằng thạc sĩ','Bằng tiến sĩ'],
+ fr:['Aucun diplôme obtenu','Études primaires terminées','Premier cycle du secondaire terminé','Diplôme du secondaire supérieur ou professionnel','Diplôme de licence','Diplôme de master','Doctorat'],
+ th:['ยังไม่มีวุฒิการศึกษา','จบประถมศึกษา','จบมัธยมศึกษาตอนต้น','จบมัธยมศึกษาตอนปลายหรืออาชีวศึกษา','ปริญญาตรี','ปริญญาโท','ปริญญาเอก'],
+ es:['Sin titulación completada','Educación primaria completada','Educación secundaria básica completada','Título de secundaria superior o formación profesional','Título de grado','Título de máster','Doctorado'],
+ tr:['Tamamlanmış bir eğitim yok','İlkokul diploması','Ortaokul diploması','Lise ya da meslek lisesi diploması','Lisans derecesi','Yüksek lisans derecesi','Doktora'],
+ ru:['Без законченного образования','Начальное образование','Основное общее образование','Среднее общее или профессиональное образование','Степень бакалавра','Степень магистра','Учёная степень доктора'],
+ de:['Noch kein Abschluss','Grundschule abgeschlossen','Sekundarstufe I abgeschlossen','Abschluss der Sekundarstufe II oder Berufsausbildung','Bachelorabschluss','Masterabschluss','Doktortitel'],
+ pt:['Nenhum diploma concluído','Ensino fundamental concluído','Ensino fundamental II concluído','Ensino médio ou formação profissional concluída','Bacharelado','Mestrado','Doutorado'],
+ id:['Belum ada kualifikasi akademik yang diselesaikan','Lulus sekolah dasar','Lulus sekolah menengah pertama','Lulus sekolah menengah atas atau pendidikan kejuruan','Gelar sarjana (S1)','Gelar magister (S2)','Gelar doktor (S3)'],
+};
+export const QUALIFICATION_CATALOGS:Record<string,Record<string,string>>=Object.fromEntries(Object.entries(labels).map(([locale,values])=>[locale,Object.fromEntries(values.map((value,index)=>[index===6?'qualification.doctorate':`qualification.${index}`,value]))]));
+
+const biography:Record<string,string>={ko:'학력: {qualification}.',ja:'学歴：{qualification}。',zh:'學歷：{qualification}。','zh-hans':'学历：{qualification}。',vi:'Trình độ học vấn: {qualification}.',fr:'Formation : {qualification}.',th:'การศึกษา: {qualification}',es:'Formación: {qualification}.',de:'Bildungsabschluss: {qualification}.',tr:'Eğitim: {qualification}.',ru:'Образование: {qualification}.',pt:'Formação acadêmica: {qualification}.',id:'Kualifikasi akademik: {qualification}.'};
+for(const [locale,text] of Object.entries(biography))QUALIFICATION_CATALOGS[locale]['bio.academicQualification']=text;
+
+const graduations:Record<string,readonly string[]>={
+ ko:['초등학교를 졸업했습니다.','중학교를 졸업했습니다.','고등학교를 졸업했습니다.','직업훈련 과정을 마쳤습니다.','대학교를 졸업하고 학사 학위를 받았습니다.','대학원을 마치고 석사 학위를 받았습니다.','박사 학위를 받았습니다. 논문의 마지막 장을 넘기며 늦은 밤까지 연구하던 지난 몇 해를 떠올립니다.'],
+ ja:['小学校を卒業しました。','中学校を卒業しました。','高校を卒業しました。','職業訓練を修了しました。','大学を卒業し、学士号を取得しました。','大学院を修了し、修士号を取得しました。','博士号を取得しました。論文の最後のページをめくり、夜遅くまで研究した日々を思い返します。'],
+ zh:['你從小學畢業了。','你從初中畢業了。','你從高中畢業了。','你完成了職業訓練。','你從大學畢業，取得了學士學位。','你完成了研究所課程，取得了碩士學位。','你取得了博士學位。翻過論文最後一頁，多年深夜研究的時光浮現在眼前。'],
+ 'zh-hans':['你从小学毕业了。','你从初中毕业了。','你从高中毕业了。','你完成了职业培训。','你从大学毕业，取得了学士学位。','你完成了研究生课程，取得了硕士学位。','你取得了博士学位。翻过论文最后一页，多年深夜研究的时光浮现在眼前。'],
+ vi:['Bạn tốt nghiệp tiểu học.','Bạn tốt nghiệp trung học cơ sở.','Bạn tốt nghiệp trung học phổ thông.','Bạn hoàn thành chương trình đào tạo nghề.','Bạn tốt nghiệp đại học và nhận bằng cử nhân.','Bạn hoàn thành chương trình cao học và nhận bằng thạc sĩ.','Bạn nhận bằng tiến sĩ. Lật trang cuối của luận án, bạn nhớ lại những năm tháng nghiên cứu đến khuya.'],
+ fr:['Vous terminez vos études primaires.','Vous terminez le premier cycle du secondaire.','Vous terminez le second cycle du secondaire.','Vous terminez votre formation professionnelle.','Vous terminez vos études universitaires et obtenez votre licence.','Vous terminez vos études de deuxième cycle et obtenez votre master.','Vous obtenez votre doctorat. En tournant la dernière page de votre thèse, vous repensez à ces années de travail jusque tard dans la nuit.'],
+ th:['คุณจบการศึกษาระดับประถมศึกษา','คุณจบการศึกษาระดับมัธยมศึกษาตอนต้น','คุณจบการศึกษาระดับมัธยมศึกษาตอนปลาย','คุณสำเร็จการฝึกอาชีพ','คุณสำเร็จการศึกษาจากมหาวิทยาลัยและได้รับปริญญาตรี','คุณสำเร็จการศึกษาระดับบัณฑิตศึกษาและได้รับปริญญาโท','คุณได้รับปริญญาเอก เมื่อพลิกหน้าสุดท้ายของวิทยานิพนธ์ คุณนึกถึงหลายปีที่ค้นคว้าจนดึกดื่น'],
+ es:['Terminas la educación primaria.','Terminas la educación secundaria básica.','Terminas la educación secundaria superior.','Completas tu formación profesional.','Te gradúas de la universidad y recibes tu título de grado.','Completas tus estudios de posgrado y recibes tu título de máster.','Recibes tu doctorado. Al pasar la última página de la tesis, recuerdas los años de trabajo hasta altas horas de la noche.'],
+ de:['Du schließt die Grundschule ab.','Du schließt die Sekundarstufe I ab.','Du schließt die Sekundarstufe II ab.','Du schließt deine Berufsausbildung ab.','Du schließt dein Studium ab und erhältst deinen Bachelorabschluss.','Du schließt dein weiterführendes Studium ab und erhältst deinen Masterabschluss.','Du erhältst deinen Doktortitel. Beim Umblättern der letzten Seite deiner Dissertation denkst du an die vielen Jahre mit langen Arbeitsnächten zurück.'],
+ tr:['İlkokuldan mezun oldun.','Ortaokuldan mezun oldun.','Liseden mezun oldun.','Mesleki eğitimini tamamladın.','Üniversiteden mezun oldun ve lisans diplomanı aldın.','Lisansüstü eğitimini tamamladın ve yüksek lisans diplomanı aldın.','Doktora dereceni aldın. Tezinin son sayfasını çevirirken yıllarca geç saatlere kadar çalıştığın geceleri hatırlıyorsun.'],
+ ru:['Вы окончили начальную школу.','Вы получили основное общее образование.','Вы окончили старшую школу.','Вы завершили профессиональное обучение.','Вы окончили университет и получили степень бакалавра.','Вы завершили магистратуру и получили степень магистра.','Вы получили докторскую степень. Перелистывая последнюю страницу диссертации, вы вспоминаете годы работы до поздней ночи.'],
+ pt:['Você se formou no ensino fundamental.','Você se formou no ensino fundamental II.','Você se formou no ensino médio.','Você concluiu o treinamento profissional.','Você se formou na universidade e recebeu seu diploma de bacharel.','Você concluiu a pós-graduação e recebeu seu diploma de mestrado.','Você recebeu seu doutorado. Ao virar a última página de sua tese, você se lembra dos anos de trabalho até tarde da noite.'],
+ id:['Anda lulus dari sekolah dasar.','Anda lulus dari sekolah menengah pertama.','Anda lulus dari sekolah menengah atas.','Anda menyelesaikan pelatihan kejuruan.','Anda lulus dari universitas dan menerima gelar sarjana.','Anda menyelesaikan studi pascasarjana dan menerima gelar magister.','Anda menerima gelar doktor. Membalik halaman terakhir disertasi, Anda mengingat kembali tahun-tahun penelitian hingga larut malam.'],
+};
+const graduationStages=['primary','lowerSecondary','upperSecondary','vocational','university','graduate','phd'];
+for(const [locale,lines] of Object.entries(graduations))for(const [index,line] of lines.entries())QUALIFICATION_CATALOGS[locale][`event.academicGraduation.${graduationStages[index]}`]=line;
+
+const continuation:Record<string,readonly string[]>={
+ ko:['학사 학위를 받았습니다. 공부를 더 할까요, 일을 시작할까요?','일자리를 찾는다','2년제 석사 과정에 지원한다','지금 하던 일을 계속한다','석사 과정에 합격했습니다.','석사 과정 입학에 실패했습니다. 일자리를 찾기 시작합니다.','학사 학위로 일자리를 찾기 시작합니다.','지금 하던 일을 계속합니다.'],
+ ja:['学士号を取得しました。勉強を続けますか、働き始めますか？','仕事を探す','2年間の修士課程に出願する','今の仕事を続ける','修士課程に合格しました。','修士課程に不合格となり、仕事を探し始めます。','学士号を生かして仕事を探し始めます。','今の仕事を続けます。'],
+ zh:['你取得了學士學位。要繼續深造，還是開始工作？','尋找工作','申請兩年制碩士課程','繼續目前的工作','你獲碩士課程錄取。','你的碩士申請未獲錄取，開始尋找工作。','你開始憑學士學位尋找工作。','你繼續目前的工作。'],
+ 'zh-hans':['你取得了学士学位。要继续深造，还是开始工作？','寻找工作','申请两年制硕士课程','继续目前的工作','你获硕士课程录取。','你的硕士申请未获录取，开始寻找工作。','你开始凭学士学位寻找工作。','你继续目前的工作。'],
+ vi:['Bạn đã nhận bằng cử nhân. Bạn sẽ học tiếp hay bắt đầu đi làm?','Tìm việc làm','Đăng ký chương trình thạc sĩ hai năm','Tiếp tục công việc hiện tại','Bạn được nhận vào chương trình thạc sĩ.','Bạn không được nhận vào chương trình thạc sĩ và bắt đầu tìm việc.','Bạn bắt đầu tìm việc với bằng cử nhân.','Bạn tiếp tục công việc hiện tại.'],
+ fr:['Vous avez obtenu votre licence. Allez-vous poursuivre vos études ou commencer à travailler ?','Chercher un emploi','Candidater à un master de deux ans','Continuer votre travail actuel','Vous êtes admis en master.','Votre candidature en master est refusée. Vous commencez à chercher du travail.','Vous commencez à chercher du travail avec votre licence.','Vous continuez votre travail actuel.'],
+ th:['คุณได้รับปริญญาตรีแล้ว จะเรียนต่อหรือเริ่มทำงาน?','หางาน','สมัครหลักสูตรปริญญาโทสองปี','ทำงานปัจจุบันต่อไป','คุณได้รับเข้าเรียนหลักสูตรปริญญาโท','ใบสมัครปริญญาโทของคุณไม่ผ่าน คุณเริ่มหางาน','คุณเริ่มหางานด้วยวุฒิปริญญาตรี','คุณทำงานปัจจุบันต่อไป'],
+ es:['Has obtenido tu título de grado. ¿Continuarás estudiando o empezarás a trabajar?','Buscar trabajo','Solicitar plaza en un máster de dos años','Continuar en tu trabajo actual','Te admiten en un programa de máster.','No te admiten en el máster. Empiezas a buscar trabajo.','Empiezas a buscar trabajo con tu título de grado.','Continúas en tu trabajo actual.'],
+ de:['Du hast deinen Bachelorabschluss. Möchtest du weiterstudieren oder anfangen zu arbeiten?','Eine Arbeit suchen','Für ein zweijähriges Masterstudium bewerben','Deine bisherige Arbeit fortsetzen','Du wirst zum Masterstudium zugelassen.','Deine Masterbewerbung wird abgelehnt. Du beginnst mit der Arbeitssuche.','Du beginnst mit deinem Bachelorabschluss nach Arbeit zu suchen.','Du setzt deine bisherige Arbeit fort.'],
+ tr:['Lisans dereceni aldın. Öğrenimine devam mı edeceksin, çalışmaya mı başlayacaksın?','İş ara','İki yıllık yüksek lisans programına başvur','Mevcut işine devam et','Yüksek lisans programına kabul edildin.','Yüksek lisans başvurun reddedildi. İş aramaya başlıyorsun.','Lisans diplomanla iş aramaya başlıyorsun.','Mevcut işine devam ediyorsun.'],
+ ru:['Вы получили степень бакалавра. Продолжите учёбу или начнёте работать?','Искать работу','Подать заявку на двухлетнюю магистратуру','Продолжить нынешнюю работу','Вас приняли в магистратуру.','Вас не приняли в магистратуру. Вы начинаете искать работу.','Вы начинаете искать работу со степенью бакалавра.','Вы продолжаете нынешнюю работу.'],
+};
+const continuationKeys=['decision.academicAfterUniversity','choice.academicWork','choice.academicGraduate','choice.academicKeep','event.academicContinuation.enrolled','event.academicContinuation.rejected','event.academicContinuation.work','event.academicContinuation.keep'];
+for(const [locale,lines] of Object.entries(continuation))for(const [index,line] of lines.entries())QUALIFICATION_CATALOGS[locale][continuationKeys[index]]=line;
+
+const doctoral:Record<string,readonly string[]>={
+ ko:['석사 학위를 받았습니다. 지도교수가 박사 과정을 권합니다. 연구를 계속할까요, 일을 시작할까요?','박사 과정에 들어간다','석사 학위로 일을 시작한다','박사 과정에 들어갔습니다. 연구실이 두 번째 집이 되었습니다.','석사 학위로 일자리를 찾기로 했습니다.'],
+ ja:['修士号を取得しました。指導教員から博士課程への進学を勧められています。研究を続けますか、働き始めますか？','博士課程に進む','修士号を生かして働き始める','博士課程に入りました。研究室が第二の家になります。','修士号を生かして仕事を探すことにしました。'],
+ zh:['你取得了碩士學位，導師邀請你繼續攻讀博士。要繼續研究，還是開始工作？','進入博士課程','憑碩士學位開始工作','你進入了博士課程，研究室成為第二個家。','你選擇憑碩士學位尋找工作。'],
+ 'zh-hans':['你取得了硕士学位，导师邀请你继续攻读博士。要继续研究，还是开始工作？','进入博士课程','凭硕士学位开始工作','你进入了博士课程，研究室成为第二个家。','你选择凭硕士学位寻找工作。'],
+ vi:['Bạn đã nhận bằng thạc sĩ. Người hướng dẫn mời bạn tiếp tục nghiên cứu tiến sĩ. Bạn sẽ học tiếp hay đi làm?','Theo học chương trình tiến sĩ','Bắt đầu đi làm với bằng thạc sĩ','Bạn bắt đầu chương trình tiến sĩ. Phòng nghiên cứu trở thành ngôi nhà thứ hai.','Bạn chọn tìm việc với bằng thạc sĩ.'],
+ fr:['Vous avez obtenu votre master. Votre directeur de recherche vous propose de poursuivre en doctorat. Allez-vous continuer vos recherches ou travailler ?','Entrer en doctorat','Commencer à travailler avec votre master','Vous entrez en doctorat. Le laboratoire devient votre deuxième maison.','Vous choisissez de chercher du travail avec votre master.'],
+ th:['คุณได้รับปริญญาโทแล้ว อาจารย์ที่ปรึกษาชวนให้ทำวิจัยระดับปริญญาเอกต่อ คุณจะเรียนต่อหรือเริ่มทำงาน?','เข้าเรียนปริญญาเอก','เริ่มทำงานด้วยวุฒิปริญญาโท','คุณเข้าเรียนปริญญาเอก ห้องวิจัยกลายเป็นบ้านหลังที่สอง','คุณเลือกหางานด้วยวุฒิปริญญาโท'],
+ es:['Has obtenido tu máster. Tu supervisor te invita a continuar con un doctorado. ¿Seguirás investigando o empezarás a trabajar?','Entrar en un programa de doctorado','Empezar a trabajar con tu máster','Entras en un programa de doctorado. El laboratorio se convierte en tu segundo hogar.','Decides buscar trabajo con tu máster.'],
+ de:['Du hast deinen Masterabschluss. Deine Betreuungsperson lädt dich zur Promotion ein. Möchtest du weiterforschen oder arbeiten?','Eine Promotion beginnen','Mit deinem Masterabschluss arbeiten','Du beginnst deine Promotion. Das Forschungslabor wird zu deinem zweiten Zuhause.','Du entscheidest dich, mit deinem Masterabschluss Arbeit zu suchen.'],
+ tr:['Yüksek lisans dereceni aldın. Danışmanın seni doktora araştırmasına devam etmeye davet ediyor. Öğrenimine devam mı edeceksin, çalışmaya mı başlayacaksın?','Doktora programına başla','Yüksek lisans derecenle çalışmaya başla','Doktora programına başladın. Araştırma laboratuvarı ikinci evin oluyor.','Yüksek lisans derecenle iş aramayı seçtin.'],
+ ru:['Вы получили степень магистра. Научный руководитель предлагает продолжить исследование в докторантуре. Продолжите учёбу или начнёте работать?','Начать обучение в докторантуре','Начать работать со степенью магистра','Вы начинаете обучение в докторантуре. Исследовательская лаборатория становится вторым домом.','Вы решаете искать работу со степенью магистра.'],
+};
+const doctoralKeys=['decision.academicPhd','choice.academicPhdAccept','choice.academicPhdWork','event.academicContinuation.doctoralEnrolled','event.academicContinuation.doctoralWork'];
+for(const [locale,lines] of Object.entries(doctoral))for(const [index,line] of lines.entries())QUALIFICATION_CATALOGS[locale][doctoralKeys[index]]=line;
+
+const withdrawals:Record<string,readonly string[]>={
+ ko:['끈기 있음','석사 과정을 {years}년 만에 그만두었습니다. 학사 학위로 일자리를 찾기로 했습니다.','박사 과정을 {years}년 만에 그만두었습니다. 연구는 생각보다 길고 외로웠습니다.'],
+ ja:['粘り強い','修士課程を{years}年で辞めました。学士号を生かして仕事を探すことにしました。','博士課程を{years}年で辞めました。研究は思ったより長く孤独なものでした。'],
+ zh:['堅持不懈','你在攻讀碩士 {years} 年後退學，決定憑學士學位尋找工作。','你在攻讀博士 {years} 年後退學。研究比預期更漫長，也更孤獨。'],
+ 'zh-hans':['坚持不懈','你在攻读硕士 {years} 年后退学，决定凭学士学位寻找工作。','你在攻读博士 {years} 年后退学。研究比预期更漫长，也更孤独。'],
+ vi:['Kiên trì','Bạn rời chương trình thạc sĩ sau {years} năm và quyết định tìm việc với bằng cử nhân.','Bạn rời chương trình tiến sĩ sau {years} năm. Nghiên cứu dài hơn và cô đơn hơn bạn tưởng.'],
+ fr:['Persévérance','Vous quittez votre master après {years} années. Vous décidez de chercher du travail avec votre licence.','Vous quittez votre doctorat après {years} années. La recherche a été plus longue et plus solitaire que prévu.'],
+ th:['มุ่งมั่นไม่ย่อท้อ','คุณออกจากหลักสูตรปริญญาโทหลังเรียนมา {years} ปี และตัดสินใจหางานด้วยวุฒิปริญญาตรี','คุณออกจากหลักสูตรปริญญาเอกหลังเรียนมา {years} ปี การวิจัยยาวนานและโดดเดี่ยวกว่าที่คาดไว้'],
+ es:['Perseverancia','Dejas el máster después de {years} años. Decides buscar trabajo con tu título de grado.','Dejas el doctorado después de {years} años. La investigación ha sido más larga y solitaria de lo esperado.'],
+ de:['Beharrlich','Du brichst dein Masterstudium nach {years} Jahren ab und suchst mit deinem Bachelorabschluss Arbeit.','Du brichst deine Promotion nach {years} Jahren ab. Die Forschung war langwieriger und einsamer als erwartet.'],
+ tr:['Azimli','Yüksek lisans programını {years} yıl sonra bıraktın. Lisans diplomanla iş aramaya karar verdin.','Doktora programını {years} yıl sonra bıraktın. Araştırma beklediğinden daha uzun ve yalnız geçti.'],
+ ru:['Настойчивость','Вы уходите из магистратуры после {years} лет учёбы и решаете искать работу со степенью бакалавра.','Вы уходите из докторантуры после {years} лет учёбы. Исследование оказалось дольше и более одиноким, чем вы ожидали.'],
+};
+const withdrawalKeys=['temperament.persistent','event.academicWithdrawal.graduate','event.academicWithdrawal.phd'];
+for(const [locale,lines] of Object.entries(withdrawals))for(const [index,line] of lines.entries())QUALIFICATION_CATALOGS[locale][withdrawalKeys[index]]=line;
+
+const universityWithdrawals:Record<string,readonly string[]>={
+ ko:['대학에서 {years}년을 마친 뒤 그만두었습니다. 일과 공부를 병행하기가 너무 어려워졌습니다.','대학에서 {years}년을 마친 뒤 그만두었습니다. 수업과 시험을 따라가기가 버거워졌습니다.','대학에서 {years}년을 마친 뒤 그만두었습니다. 공부가 예상과 달라 다른 길을 찾기로 했습니다.'],
+ ja:['大学で{years}年間学んだ後、退学しました。仕事と勉強の両立が難しくなりました。','大学で{years}年間学んだ後、退学しました。授業や試験についていくことが難しくなりました。','大学で{years}年間学んだ後、退学しました。学ぶ内容が想像と違い、別の道を探すことにしました。'],
+ zh:['完成大學第 {years} 年後，你退學了。兼顧工作與學業變得太困難。','完成大學第 {years} 年後，你退學了。課業與考試讓你難以負荷。','完成大學第 {years} 年後，你退學了。課程與預期不同，你決定尋找另一條路。'],
+ 'zh-hans':['完成大学第 {years} 年后，你退学了。兼顾工作与学业变得太困难。','完成大学第 {years} 年后，你退学了。课业与考试让你难以承受。','完成大学第 {years} 年后，你退学了。课程与预期不同，你决定寻找另一条路。'],
+ vi:['Bạn rời đại học sau khi hoàn thành năm thứ {years}. Việc cân bằng công việc và học tập đã trở nên quá khó khăn.','Bạn rời đại học sau khi hoàn thành năm thứ {years}. Theo kịp bài học và các kỳ thi đã trở nên quá sức.','Bạn rời đại học sau khi hoàn thành năm thứ {years}. Chương trình khác với mong đợi, và bạn quyết định tìm một con đường khác.'],
+ fr:['Vous quittez l’université après avoir terminé votre année {years}. Concilier travail et études est devenu trop difficile.','Vous quittez l’université après avoir terminé votre année {years}. Suivre les cours et les examens est devenu trop éprouvant.','Vous quittez l’université après avoir terminé votre année {years}. Le cursus ne correspondait pas à vos attentes et vous choisissez une autre voie.'],
+ th:['คุณออกจากมหาวิทยาลัยหลังเรียนจบปีที่ {years} การทำงานควบคู่กับการเรียนยากเกินไปแล้ว','คุณออกจากมหาวิทยาลัยหลังเรียนจบปีที่ {years} การตามบทเรียนและการสอบให้ทันกลายเป็นเรื่องหนักเกินไป','คุณออกจากมหาวิทยาลัยหลังเรียนจบปีที่ {years} หลักสูตรต่างจากที่คาดหวัง คุณจึงตัดสินใจหาเส้นทางใหม่'],
+ es:['Dejas la universidad tras completar el año {years}. Compaginar el trabajo y los estudios se ha vuelto demasiado difícil.','Dejas la universidad tras completar el año {years}. Seguir las clases y los exámenes se ha vuelto abrumador.','Dejas la universidad tras completar el año {years}. El curso no era lo que esperabas y decides buscar otro camino.'],
+ de:['Du verlässt die Universität nach Abschluss von Studienjahr {years}. Arbeit und Studium zu vereinbaren ist zu schwierig geworden.','Du verlässt die Universität nach Abschluss von Studienjahr {years}. Mit den Lehrveranstaltungen und Prüfungen Schritt zu halten ist zu belastend geworden.','Du verlässt die Universität nach Abschluss von Studienjahr {years}. Das Studium entsprach nicht deinen Erwartungen, und du suchst einen anderen Weg.'],
+ tr:['Üniversitede {years}. yılı tamamladıktan sonra ayrıldın. İş ve eğitimi dengelemek çok zorlaştı.','Üniversitede {years}. yılı tamamladıktan sonra ayrıldın. Derslere ve sınavlara yetişmek bunaltıcı hale geldi.','Üniversitede {years}. yılı tamamladıktan sonra ayrıldın. Program beklentilerinden farklıydı ve başka bir yol aramaya karar verdin.'],
+ ru:['Вы уходите из университета после завершения года обучения {years}. Совмещать работу и учёбу стало слишком трудно.','Вы уходите из университета после завершения года обучения {years}. Справляться с занятиями и экзаменами стало слишком тяжело.','Вы уходите из университета после завершения года обучения {years}. Программа не оправдала ожиданий, и вы решаете выбрать другой путь.'],
+};
+for(const [locale,lines] of Object.entries(universityWithdrawals))for(const [index,reason] of ['parttime','academic','direction'].entries())QUALIFICATION_CATALOGS[locale][`event.academicWithdrawal.university.${reason}`]=lines[index];

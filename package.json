@@ -1,0 +1,50 @@
+{
+  "name": "1in8bn",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "Two-player & solo browser life simulation with real-time Agora WebRTC voice, TanStack Start SSR, and Cloudflare Workers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0xRe/1in8b.git"
+  },
+  "packageManager": "pnpm@11.0.9",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "SITE_ID=1in8bn vite --host 127.0.0.1 --port 3089",
+    "build": "SITE_ID=1in8bn vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "preview": "SITE_ID=1in8bn vite preview --host 127.0.0.1 --port 3089"
+  },
+  "dependencies": {
+    "@fontsource/hahmlet": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@tanstack/react-router": "1.170.45",
+    "@tanstack/react-start": "1.169.3",
+    "agora-rtc-sdk-ng": "^4.24.9",
+    "agora-token": "^2.0.7",
+    "lucide-react": "0.468.0",
+    "qrcode-generator": "2.0.4",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-icons": "5.7.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.64.0",
+    "@types/node": "22.19.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@vitejs/plugin-react": "5.2.0",
+    "fake-indexeddb": "^6.2.6",
+    "jsqr": "1.4.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vite": "8.3.4",
+    "wrangler": "4.151.2"
+  }
+}
